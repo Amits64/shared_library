@@ -11,10 +11,6 @@ on:
         description: 'AWS Secret Access Key'
         required: true
         type: string
-      aws-region:
-        description: 'AWS Region'
-        required: true
-        type: string
       tf-cloud-token:
         description: 'Terraform Cloud Token'
         required: true
@@ -29,6 +25,8 @@ on:
       AWS_SECRET_ACCESS_KEY:
         required: true
       TF_CLOUD_TOKEN:
+        required: true
+      aws-region:
         required: true
 
 jobs:
@@ -48,7 +46,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ inputs.aws-region }}
+          aws-region: ${{ secrets.aws-region }}
 
       - name: Configure Terraform credentials
         run: |
