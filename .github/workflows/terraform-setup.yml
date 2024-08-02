@@ -20,7 +20,7 @@ on:
         required: true
         type: string
       working-directory:
-        description: 'Working Directory'
+        description: 'Working directory'
         required: true
         type: string
 
