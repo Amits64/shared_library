@@ -23,6 +23,13 @@ on:
         description: 'Working directory'
         required: true
         type: string
+    secrets:
+      AWS_ACCESS_KEY_ID:
+        required: true
+      AWS_SECRET_ACCESS_KEY:
+        required: true
+      TF_CLOUD_TOKEN:
+        required: true
 
 jobs:
   terraform:
@@ -39,8 +46,8 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-access-key-id: ${{ inputs.aws-access-key-id }}
-          aws-secret-access-key: ${{ inputs.aws-secret-access-key }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ inputs.aws-region }}
 
       - name: Configure Terraform credentials
@@ -50,7 +57,7 @@ jobs:
           {
             "credentials": {
               "app.terraform.io": {
-                "token": "${{ inputs.tf-cloud-token }}"
+                "token": "${{ secrets.TF_CLOUD_TOKEN }}"
               }
             }
           }
@@ -71,9 +78,6 @@ jobs:
 
       - name: Terraform plan
         run: terraform plan -no-color -input=false
-        env:
-          AWS_ACCESS_KEY_ID: ${{ inputs.aws-access-key-id }}
-          AWS_SECRET_ACCESS_KEY: ${{ inputs.aws-secret-access-key }}
 
       - name: Terraform apply
         run: terraform apply --auto-approve -input=false
