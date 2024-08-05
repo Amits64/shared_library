@@ -1,11 +1,11 @@
-def ciPipeline(String registry, String registryCredential, String image, String tag, String sonarHostUrl) {
+def ciPipeline(String registry, String registryCredential, String image, String tag, String sonarHostUrl, String repoUrl) {
     stages {
         stage('Git Checkout') {
             steps {
                 checkout([
                     $class: 'GitSCM',
                     branches: [[name: 'main']],
-                    userRemoteConfigs: [[url: 'https://github.com/Amits64/crud-app.git']]
+                    userRemoteConfigs: [[url: repoUrl]]
                 ])
             }
         }
