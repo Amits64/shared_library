@@ -11,6 +11,10 @@ on:
         description: 'Working directory'
         required: true
         type: string
+      tf-cloud-token:
+        description: 'Terraform token'
+        required: true
+        type: string
     secrets:
       AWS_ACCESS_KEY_ID:
         required: true
