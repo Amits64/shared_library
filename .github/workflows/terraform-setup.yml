@@ -4,19 +4,27 @@ on:
   workflow_call:
     inputs:
       aws-region:
+        required: true
         type: string
       tf-cloud-token:
+        required: true
         type: string
       working-directory:
+        required: true
         type: string
       aws-access-key-id:
+        required: true
         type: string
       aws-secret-access-key:
+        required: true
         type: string
 
 jobs:
   terraform:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ inputs.working-directory }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
