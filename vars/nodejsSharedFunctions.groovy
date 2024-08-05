@@ -28,6 +28,12 @@ def ciPipeline(String registry, String registryCredential, String image, String 
             }
         }
 
+        stage('Quality Gate') {
+            steps {
+                waitForQualityGate abortPipeline: true
+            }
+        }
+
         stage('Build Docker Image') {
             steps {
                 script {
