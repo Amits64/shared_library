@@ -31,8 +31,6 @@ jobs:
 
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v3
-        with:
-          terraform_version: 1.9.3
 
       - name: "Configure Terraform credentials"
         run: |
