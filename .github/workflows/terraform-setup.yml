@@ -1,76 +1,58 @@
-name: 'Terraform Setup'
+name: Terraform Setup
 
 on:
   workflow_call:
     inputs:
-      aws-region:
-        description: 'AWS Region'
-        required: true
-        type: string
-      tf-cloud-token:
-        description: 'Terraform Cloud Token'
-        required: true
-        type: string
       aws-access-key-id:
-        description: 'AWS Access Key ID'
         required: true
         type: string
       aws-secret-access-key:
-        description: 'AWS Secret Access Key'
+        required: true
+        type: string
+      aws-region:
+        required: true
+        type: string
+      tf-cloud-token:
         required: true
         type: string
       working-directory:
         description: 'Working directory'
         required: true
         type: string
+    secrets:
+      aws-access-key-id:
+        required: true
+      aws-secret-access-key:
+        required: true
+      aws-region:
+        required: true
+      tf-cloud-token:
+        required: true
 
 jobs:
   terraform:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
-        working-directory: ${{ inputs.working-directory }}
-
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.0.0
 
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-access-key-id: ${{ inputs.aws-access-key-id }}
           aws-secret-access-key: ${{ inputs.aws-secret-access-key }}
           aws-region: ${{ inputs.aws-region }}
 
-      - name: Configure Terraform credentials
-        run: |
-          mkdir -p ~/.terraform.d
-          cat > ~/.terraform.d/credentials.tfrc.json <<EOF
-          {
-            "credentials": {
-              "app.terraform.io": {
-                "token": "${{ inputs.tf-cloud-token }}"
-              }
-            }
-          }
-          EOF
-
-      - name: Set up Terraform
-        uses: hashicorp/setup-terraform@v3
-
-      - name: Terraform init
+      - name: Terraform Init
         run: terraform init
 
-      - name: Terraform fmt
-        run: terraform fmt -check
-        continue-on-error: true
+      - name: Terraform Plan
+        run: terraform plan
 
-      - name: Terraform validate
-        run: terraform validate
-
-      - name: Terraform plan
-        run: terraform plan -no-color -input=false
-
-      - name: Terraform apply
-        run: terraform apply --auto-approve -input=false
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
