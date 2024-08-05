@@ -56,7 +56,14 @@ jobs:
         run: terraform init
 
       - name: Terraform Plan
+        id: plan
         run: terraform plan
+      
+      - name: Terraform plan status
+        if: steps.plan.outcome == 'failure'
+        run: echo "Terraform plan failed"
 
       - name: Terraform Apply
+        id: apply
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: terraform apply -auto-approve
