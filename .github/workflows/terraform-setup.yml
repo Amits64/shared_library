@@ -7,10 +7,6 @@ on:
         description: 'AWS Region'
         required: true
         type: string
-      tf-cloud-token:
-        description: 'Terraform Cloud Token'
-        required: true
-        type: string
       working-directory:
         description: 'Working directory'
         required: true
