@@ -1,6 +1,13 @@
-def call(Map params) {
+def call(String registry, String registryCredential, String image, String tag, String sonarHostUrl) {
     pipeline {
         agent any
+
+        environment {
+            registry = registry
+            registryCredential = registryCredential
+            image = image
+            tag = tag
+        }
 
         stages {
             stage('Git Checkout') {
@@ -21,8 +28,8 @@ def call(Map params) {
                             withSonarQubeEnv('sonarqube') {
                                 sh """
                                 sonar-scanner \
-                                -Dsonar.host.url=${params.sonarHostUrl} \
-                                -Dsonar.projectKey="${params.image}" \
+                                -Dsonar.host.url=${sonarHostUrl} \
+                                -Dsonar.projectKey="${image}" \
                                 -Dsonar.exclusions=**/*.java
                                 """
                             }
@@ -34,7 +41,7 @@ def call(Map params) {
             stage('Build Docker Image') {
                 steps {
                     script {
-                        docker.build("${params.registry}/${params.image}:${params.tag}", "-f Dockerfile .")
+                        docker.build("${registry}/${image}:${tag}", "-f Dockerfile .")
                     }
                 }
             }
