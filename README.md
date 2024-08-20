@@ -146,6 +146,3 @@ For more information, please refer to the documentation provided within the work
 - **Update Repository URLs**: Replace placeholder URLs and repository names with your actual organization’s repository URLs.
 - **Add Detailed Descriptions**: If you have specific modules or workflows, include detailed descriptions of their purpose and usage.
 - **Add More Sections**: Depending on your library’s features, you might want to include additional sections like `Troubleshooting`, `FAQs`, or `Release Notes`.
-
----
-Feel free to adjust the content according to your specific needs and requirements.
