@@ -28,7 +28,8 @@ def ciPipeline(String registry, String registryCredential, String image, String 
                                 sonar-scanner \
                                 -Dsonar.host.url=${sonarHostUrl} \
                                 -Dsonar.projectKey=${image} \
-                                -Dsonar.exclusions=**/*.java
+                                -Dsonar.exclusions=**/*.java \
+                                -Dsonar.sourceEncoding=UTF-8
                                 """
                             }
                         }
@@ -39,7 +40,7 @@ def ciPipeline(String registry, String registryCredential, String image, String 
             stage('Quality Gate') {
                 steps {
                     script {
-                        timeout(time: 1, unit: 'MINUTES') {
+                        timeout(time: 5, unit: 'MINUTES') { // Increased timeout to 5 minutes
                             waitForQualityGate abortPipeline: true
                         }
                     }
@@ -50,9 +51,19 @@ def ciPipeline(String registry, String registryCredential, String image, String 
                 steps {
                     script {
                         docker.withRegistry("https://${registry}", REGISTRY_CREDENTIAL) {
-                            docker.build("${registry}/${image}:${tag}", "-f Dockerfile .").push()
+                            def customDockerfile = 'Dockerfile'  // Adjust if Dockerfile has a different name or path
+                            def dockerImage = docker.build("${registry}/${image}:${tag}", "-f ${customDockerfile} .")
+                            dockerImage.push()
                         }
                     }
+                }
+            }
+        }
+        
+        post {
+            always {
+                script {
+                    echo "CI Pipeline executed for image ${registry}/${image}:${tag}"
                 }
             }
         }
