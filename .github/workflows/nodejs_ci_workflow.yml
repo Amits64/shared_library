@@ -1,31 +1,40 @@
 name: "CI Workflow"
+
 on:
-  workflow_dispatch:
+  workflow_call:
     inputs:
       sonar_token:
         description: "SonarCloud authentication token"
         required: true
+        type: string
       sonar_organization:
         description: "SonarCloud organization"
         required: true
+        type: string
       sonar_host_url:
         description: "SonarQube host URL"
         required: true
+        type: string
       github_token:
         description: "GitHub token"
         required: true
+        type: string
       dockerhub_username:
         description: "Docker Hub username"
         required: true
+        type: string
       dockerhub_password:
         description: "Docker Hub password"
         required: true
+        type: string
       registry:
         description: "Docker registry"
         required: true
+        type: string
       image:
         description: "Docker Image name"
         required: true
+        type: string
 
 jobs:
   ci:
