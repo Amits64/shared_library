@@ -21,7 +21,7 @@ on:
         description: "Docker Hub password"
         required: true
       registry:
-        description: "Docker Image name"
+        description: "Docker registry"
         required: true
       image:
         description: "Docker Image name"
